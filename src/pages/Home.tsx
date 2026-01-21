@@ -21,7 +21,7 @@ export function Home() {
               Logged in as {user.username}
             </p>
             <div className="hero-actions">
-              <button className="button button-secondary" onClick={logOut}>
+              <button className="button button-secondary" onClick={logOut} id="logout-button">
                 Log out
               </button>
             </div>
@@ -36,7 +36,7 @@ export function Home() {
             </p>
             <div className="hero-actions">
               <a
-                onClick={() => console.log('hello')}
+                id="login-button"
                 className="button button-secondary"
                 href="https://auth.george.richmond.gg/?redirectTo=https%3A%2F%2Fminigames.george.richmond.gg"
                 rel="noopener noreferrer"
