@@ -1,11 +1,24 @@
 import { NavBar } from './NavBar'
 import { Home } from '../pages/Home'
 import { Demo } from '../pages/Demo'
+import { useUser } from '../hooks/useUser'
+import { useEffect } from 'react'
+import { a } from 'framer-motion/client'
 
 export function Layout() {
+  const { user, authenticateUser } = useUser()
+
+  useEffect(() => {
+    console.log('Current user:', user)
+
+    if (!user) {
+      console.log('Authenticating user...')
+      authenticateUser()
+    }
+  }, [user, authenticateUser])
+
   const websiteTitle = 'Minigames'
   const websiteTagline = 'Play now!'
-
   return (
     <div className="app">
       <header className="header" style={{ position: 'fixed', top: 0, left: 0, right: 0 }}>
