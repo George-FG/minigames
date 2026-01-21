@@ -35,9 +35,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
       }
     )
 
@@ -49,9 +46,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         {
           method: 'POST',
           credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
         }
       )
     }
