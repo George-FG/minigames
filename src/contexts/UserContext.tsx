@@ -31,7 +31,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const submitScore = async (game: string, score: number) => {
     let res = await fetch(
-      `https://api.george.richmond.gg/api/submit-score/?game=${game}&score=${score}`,
+      `https://api.george.richmond.gg/api/submit-score?game=${game}&score=${score}`,
       {
         method: 'POST',
         credentials: 'include',
@@ -42,7 +42,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       console.error('Failed to submit score...')
       await authenticate()
       res = await fetch(
-        `https://api.george.richmond.gg/api/submit-score/?game=${game}&score=${score}`,
+        `https://api.george.richmond.gg/api/submit-score?game=${game}&score=${score}`,
         {
           method: 'POST',
           credentials: 'include',
