@@ -72,6 +72,12 @@ export function TwoZeroFourEight({
   const idRef = useRef(1)
   const [isAnimating, setIsAnimating] = useState(false)
 
+  useEffect(() => {
+    if (gameOver) {
+      console.log('Game over! Final score:', score)
+    }
+  }, [gameOver, score])
+
   const getTileColor = (value: number | null): string => {
     if (value === null) return 'rgba(238, 228, 218, 0.35)'
     return (

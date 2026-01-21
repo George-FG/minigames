@@ -5,7 +5,7 @@ export function NavBar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'demo']
+      const sections = ['home', 'leaderboard', 'demo']
       const scrollPosition = window.scrollY + window.innerHeight / 3
 
       for (const sectionId of sections) {
@@ -51,6 +51,13 @@ export function NavBar() {
         onClick={(e) => handleClick(e, 'home')}
       >
         Home
+      </a>
+      <a
+        href="#leaderboard"
+        className={`nav-link ${activeSection === 'leaderboard' ? 'nav-link-active' : ''}`}
+        onClick={(e) => handleClick(e, 'leaderboard')}
+      >
+        Leaderboard
       </a>
       <a
         href="#demo"

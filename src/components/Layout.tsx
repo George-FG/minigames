@@ -1,5 +1,6 @@
 import { NavBar } from './NavBar'
 import { Home } from '../pages/Home'
+import { Leaderboard } from '../pages/Leaderboard'
 import { Demo } from '../pages/Demo'
 import { useUser } from '../hooks/useUser'
 import { useEffect } from 'react'
@@ -35,6 +36,7 @@ export function Layout() {
 
       <main className="main" style={{ paddingTop: '90px' }}>
         <Home />
+        <Leaderboard />
         <Demo />
       </main>
 
