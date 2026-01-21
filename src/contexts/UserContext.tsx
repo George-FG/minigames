@@ -34,7 +34,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ req: { game, score } }),
+      body: JSON.stringify({ game, score }),
     })
 
     if (!res.ok) {
@@ -44,7 +44,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ req: { game, score } }),
+        body: JSON.stringify({ game, score }),
       })
     }
 
