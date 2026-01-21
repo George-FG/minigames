@@ -129,15 +129,15 @@ export function Leaderboard() {
               >
                 <button
                   onClick={handlePrevPage}
-                  disabled={page === 1 || loading}
+                  disabled={page === 0 || loading}
                   style={{
                     padding: '0.75rem 1.5rem',
-                    background: page === 1 ? '#333' : '#4CAF50',
+                    background: page === 0 ? '#333' : '#4CAF50',
                     color: 'white',
                     border: 'none',
                     borderRadius: '4px',
-                    cursor: page === 1 ? 'not-allowed' : 'pointer',
-                    opacity: page === 1 ? 0.5 : 1,
+                    cursor: page === 0 ? 'not-allowed' : 'pointer',
+                    opacity: page === 0 ? 0.5 : 1,
                   }}
                 >
                   Previous
