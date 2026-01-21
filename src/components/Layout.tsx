@@ -3,7 +3,6 @@ import { Home } from '../pages/Home'
 import { Demo } from '../pages/Demo'
 import { useUser } from '../hooks/useUser'
 import { useEffect } from 'react'
-import { a } from 'framer-motion/client'
 
 export function Layout() {
   const { user, authenticateUser } = useUser()

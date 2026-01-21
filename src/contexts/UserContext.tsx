@@ -7,6 +7,7 @@ interface User {
 interface UserContextType {
   user: User | null
   authenticateUser: () => void
+  logOut: () => void
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined)
@@ -19,14 +20,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(userData)
   }
 
-  return <UserContext.Provider value={{ user, authenticateUser }}>{children}</UserContext.Provider>
+  const logOut = async () => {
+    document.cookie = 'SESSION=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    document.cookie = 'REFRESH=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    setUser(null)
+  }
+
+  return (
+    <UserContext.Provider value={{ user, authenticateUser, logOut }}>
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 async function authenticate() {
   let res = await fetch('https://api.george.richmond.gg/api/me', { credentials: 'include' })
 
   if (res.status === 401) {
-    // silent refresh
     const r = await fetch('https://api.george.richmond.gg/api/refresh', {
       method: 'POST',
       credentials: 'include',
