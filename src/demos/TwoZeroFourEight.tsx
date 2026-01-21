@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useUser } from '../hooks/useUser'
 
 // ============================================
 // DEVELOPER SETTINGS - Easy to tweak
@@ -71,10 +72,12 @@ export function TwoZeroFourEight({
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const idRef = useRef(1)
   const [isAnimating, setIsAnimating] = useState(false)
+  const { submitScore } = useUser()
 
   useEffect(() => {
     if (gameOver) {
       console.log('Game over! Final score:', score)
+      if (submitScore) submitScore('2048', score)
     }
   }, [gameOver, score])
 
