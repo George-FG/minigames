@@ -9,7 +9,7 @@ interface ScoreEntry {
 
 export function Leaderboard() {
   const [scores, setScores] = useState<ScoreEntry[]>([])
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -38,7 +38,7 @@ export function Leaderboard() {
       const data = await response.json()
       console.log('Fetched scores data:', data)
 
-      //setScores(data.scores)
+      setScores(data.content ?? [])
       //setHasMore(data.scores.length === limit)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')

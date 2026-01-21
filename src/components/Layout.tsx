@@ -15,9 +15,6 @@ export function Layout() {
     if (!user) {
       console.log('Authenticating user...')
       authenticateUser()
-    } else if (user && !submitted) {
-      submitScore('2048', 2234)
-      setSubmitted(true)
     }
   }, [user, authenticateUser, submitScore, submitted])
 
