@@ -6,7 +6,7 @@ import { useUser } from '../hooks/useUser'
 import { useEffect } from 'react'
 
 export function Layout() {
-  const { user, authenticateUser } = useUser()
+  const { user, authenticateUser, submitScore } = useUser()
 
   useEffect(() => {
     console.log('Current user:', user)
@@ -14,8 +14,10 @@ export function Layout() {
     if (!user) {
       console.log('Authenticating user...')
       authenticateUser()
+    } else {
+      submitScore('2048', 2234)
     }
-  }, [user, authenticateUser])
+  }, [user, authenticateUser, submitScore])
 
   const websiteTitle = 'Minigames'
   const websiteTagline = 'Play now!'
