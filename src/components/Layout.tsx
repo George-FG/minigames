@@ -3,10 +3,11 @@ import { Home } from '../pages/Home'
 import { Leaderboard } from '../pages/Leaderboard'
 import { Demo } from '../pages/Demo'
 import { useUser } from '../hooks/useUser'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function Layout() {
   const { user, authenticateUser, submitScore } = useUser()
+  const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
     console.log('Current user:', user)
@@ -14,10 +15,11 @@ export function Layout() {
     if (!user) {
       console.log('Authenticating user...')
       authenticateUser()
-    } else {
+    } else if (user && !submitted) {
       submitScore('2048', 2234)
+      setSubmitted(true)
     }
-  }, [user, authenticateUser, submitScore])
+  }, [user, authenticateUser, submitScore, submitted])
 
   const websiteTitle = 'Minigames'
   const websiteTagline = 'Play now!'
