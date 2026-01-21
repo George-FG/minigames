@@ -8,7 +8,7 @@ interface UserContextType {
   user: User | null
   authenticateUser: () => void
   logOut: () => void
-  submitScore?: (game: string, score: number) => void
+  submitScore: (game: string, score: number) => void
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined)
