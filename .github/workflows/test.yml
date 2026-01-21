@@ -1,6 +1,10 @@
 name: Selenium Test
 
-on: [push]
+on:
+  workflow_run:
+    workflows: ["Deploy"]   # <--- name of deploy.yml workflow
+    types:
+      - completed 
 
 jobs:
   test:
@@ -25,8 +29,8 @@ jobs:
 
       - name: Install geckodriver
         run: |
-          wget https://api.github.com/repos/mozilla/geckodriver/releases/202267170-linux64.tar.gz
-          tar -xvzf 202267170-linux64.tar.gz
+          wget https://github.com/mozilla/geckodriver/releases/download/v0.36.0/geckodriver-v0.36.0-linux-aarch64.tar.gz
+          tar -xvzf geckodriver-v0.36.0-linux-aarch64.tar.gz
           sudo mv geckodriver /usr/local/bin/
           
       - name: Run Selenium
