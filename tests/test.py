@@ -16,6 +16,7 @@ def make_driver(headless: bool = False):
         opts.add_argument("--headless=new")
     opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--no-sandbox")
+    opts.binary_location = "/usr/bin/firefox"
     return webdriver.Firefox(options=opts)
 
 
