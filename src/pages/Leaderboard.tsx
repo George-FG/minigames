@@ -55,7 +55,7 @@ export function Leaderboard() {
   }
 
   const handlePrevPage = () => {
-    if (page >= 1 && !loading) {
+    if (page > 1 && !loading) {
       setPage((prev) => prev - 1)
     }
   }
