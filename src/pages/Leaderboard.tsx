@@ -9,7 +9,7 @@ interface ScoreEntry {
 
 export function Leaderboard() {
   const [scores, setScores] = useState<ScoreEntry[]>([])
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -27,7 +27,7 @@ export function Leaderboard() {
 
     try {
       const response = await fetch(
-        `https://api.george.richmond.gg/api/scores-by-game?game=${game}&page=${page}&size=${limit}`,
+        `https://api.george.richmond.gg/api/scores-by-game?game=${game}&page=${page - 1}&size=${limit}`,
         { credentials: 'include', method: 'GET' }
       )
 
