@@ -21,9 +21,9 @@ export function Home() {
               Logged in as {user.username}
             </p>
             <div className="hero-actions">
-              <a className="button button-secondary" onClick={logOut}>
+              <button className="button button-secondary" onClick={logOut}>
                 Log out
-              </a>
+              </button>
             </div>
           </>
         ) : (
