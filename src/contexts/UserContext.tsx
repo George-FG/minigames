@@ -30,24 +30,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const submitScore = async (game: string, score: number) => {
-    let res = await fetch(
-      `https://api.george.richmond.gg/api/submit-score?game=${game}&score=${score}`,
-      {
-        method: 'POST',
-        credentials: 'include',
-      }
-    )
+    let res = await fetch(`https://api.george.richmond.gg/api/submit-score`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ game, score }),
+    })
 
     if (!res.ok) {
       console.error('Failed to submit score...')
-      await authenticate()
-      res = await fetch(
-        `https://api.george.richmond.gg/api/submit-score?game=${game}&score=${score}`,
-        {
-          method: 'POST',
-          credentials: 'include',
-        }
-      )
+      await authenticateUser()
+      res = await fetch(`https://api.george.richmond.gg/api/submit-score`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game, score }),
+      })
     }
 
     console.log('Score submission response:', res)
