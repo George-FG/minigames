@@ -38,8 +38,8 @@ export function Leaderboard() {
       const data = await response.json()
       console.log('Fetched scores data:', data)
 
-      setScores(data.scores)
-      setHasMore(data.scores.length === limit)
+      //setScores(data.scores)
+      //setHasMore(data.scores.length === limit)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
       console.error('Error fetching scores:', err)
