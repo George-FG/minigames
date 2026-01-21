@@ -21,8 +21,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const logOut = async () => {
-    document.cookie = 'SESSION=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-    document.cookie = 'REFRESH=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    await fetch('https://api.george.richmond.gg/api/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
     setUser(null)
   }
 
