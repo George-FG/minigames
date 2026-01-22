@@ -40,7 +40,7 @@ export function Leaderboard() {
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load scores')
       } finally {
-        if (!cancelled) setLoading(false)
+        setLoading(false)
       }
     }
 
