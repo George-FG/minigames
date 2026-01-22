@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useUser } from '../hooks/useUser'
 
 const SETTINGS = {
   minBars: 10,
@@ -241,6 +242,8 @@ export function SortingVisualizer({ size = 'large' }: SortingVisualizerProps) {
   const [steps, setSteps] = useState<Step[] | null>(null)
 
   const timerRef = useRef<number | null>(null)
+  const { submitScore } = useUser()
+  const submittedRef = useRef(false)
 
   const currentStep = useMemo<Step>(() => {
     if (!steps || steps.length === 0) return { values }
@@ -248,6 +251,23 @@ export function SortingVisualizer({ size = 'large' }: SortingVisualizerProps) {
   }, [stepIndex, steps, values])
 
   const liveValues = currentStep.values
+
+  // Submit score when sorting is finished
+  useEffect(() => {
+    if (!steps || steps.length === 0 || isSorting) {
+      submittedRef.current = false
+      return
+    }
+
+    // Check if we've reached the end (sorting is complete)
+    if (stepIndex >= steps.length - 1) {
+      if (submittedRef.current) return
+
+      // Submit the number of steps as the score
+      submitScore('sorting', steps.length)
+      submittedRef.current = true
+    }
+  }, [steps, stepIndex, isSorting, submitScore])
 
   const stop = useCallback(() => {
     setIsSorting(false)

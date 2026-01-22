@@ -93,6 +93,8 @@ export function Leaderboard() {
           >
             <option value="2048">2048</option>
             <option value="snake">Snake</option>
+            <option value="sorting">Sorting Visualiser</option>
+            <option value="pathfinding">Pathfinding Visualiser</option>
           </select>
         </div>
 
@@ -110,7 +112,9 @@ export function Leaderboard() {
                   <tr style={{ borderBottom: '2px solid #333' }}>
                     <th style={{ padding: '1rem', textAlign: 'left' }}>Rank</th>
                     <th style={{ padding: '1rem', textAlign: 'left' }}>Player</th>
-                    <th style={{ padding: '1rem', textAlign: 'right' }}>Score</th>
+                    <th style={{ padding: '1rem', textAlign: 'right' }}>
+                      {game === '2048' || game === 'snake' ? 'Score' : 'Steps Watched'}
+                    </th>
                     <th style={{ padding: '1rem', textAlign: 'right' }}>Date</th>
                   </tr>
                 </thead>

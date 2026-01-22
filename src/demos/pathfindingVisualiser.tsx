@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTrafficSimulation } from './trafficSimulation'
+import { useUser } from '../hooks/useUser'
 
 // ============================================
 // DEVELOPER SETTINGS - Easy to tweak
@@ -913,6 +914,8 @@ export function PathfindingVisualizer({ size = 'large' }: PathfindingVisualizerP
 
   const timerRef = useRef<number | null>(null)
   const tapModeRef = useRef<'setStart' | 'setGoal'>('setStart')
+  const { submitScore } = useUser()
+  const submittedRef = useRef(false)
 
   // Use traffic simulation hook
   const trafficVehicles = useTrafficSimulation(trafficMode, trafficDensity, nodes, edges, buildAdj)
@@ -999,6 +1002,20 @@ export function PathfindingVisualizer({ size = 'large' }: PathfindingVisualizerP
     if (!steps || steps.length === 0) return { message: 'Ready' }
     return steps[clamp(stepIndex, 0, steps.length - 1)]
   }, [stepIndex, steps])
+
+  // Submit score when pathfinding reconstruction is finished
+  useEffect(() => {
+    if (!current.done || !steps || steps.length === 0) {
+      submittedRef.current = false
+      return
+    }
+
+    if (submittedRef.current) return
+
+    // Submit the number of steps as the score
+    submitScore('pathfinding', steps.length)
+    submittedRef.current = true
+  }, [current.done, steps, submitScore])
 
   const visitedSet = useMemo(() => new Set(current.visited ?? []), [current.visited])
   const frontierSet = useMemo(() => new Set(current.frontier ?? []), [current.frontier])
