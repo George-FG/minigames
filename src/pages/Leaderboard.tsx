@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
-
-interface ScoreEntry {
-  game: string
-  username: string
-  score: number
-  timestamp: string
-}
+import { ScoreEntry } from '../contexts/LeaderboardContext'
+import { useUser } from '../hooks/useUser'
+import { useLeaderboard } from '../hooks/useLeaderboard'
 
 export function Leaderboard() {
   const [scores, setScores] = useState<ScoreEntry[]>([])
@@ -13,40 +9,42 @@ export function Leaderboard() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { getScores } = useLeaderboard()
+  const { authenticateUser } = useUser()
 
   const game = '2048'
   const limit = 10
 
   useEffect(() => {
-    fetchScores()
-  }, [page, game])
+    let cancelled = false
 
-  const fetchScores = async () => {
-    setLoading(true)
-    setError(null)
+    const run = async () => {
+      try {
+        setLoading(true)
+        setError(null)
 
-    try {
-      const response = await fetch(
-        `https://api.george.richmond.gg/api/scores-by-game?game=${game}&page=${page - 1}&size=${limit}`,
-        { credentials: 'include', method: 'GET' }
-      )
+        let res = await getScores(game, page, limit)
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch scores')
+        if (!res || res.length === 0) {
+          await authenticateUser()
+          res = await getScores(game, page, limit)
+        }
+
+        if (!cancelled) setScores(res)
+        if (!cancelled) setHasMore(res.length === limit)
+      } catch (e) {
+        if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load scores')
+      } finally {
+        if (!cancelled) setLoading(false)
       }
-
-      const data = await response.json()
-      console.log('Fetched scores data:', data)
-
-      setScores(data.content ?? [])
-      //setHasMore(data.number === limit)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-      console.error('Error fetching scores:', err)
-    } finally {
-      setLoading(false)
     }
-  }
+
+    run()
+
+    return () => {
+      cancelled = true
+    }
+  }, [game, page, limit, getScores, authenticateUser])
 
   const handleNextPage = () => {
     if (hasMore && !loading) {
@@ -88,7 +86,7 @@ export function Leaderboard() {
                   {scores.length === 0 ? (
                     <tr>
                       <td colSpan={4} style={{ padding: '2rem', textAlign: 'center' }}>
-                        No scores yet. Be the first to play!
+                        {' '}
                       </td>
                     </tr>
                   ) : (
