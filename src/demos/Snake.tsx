@@ -279,8 +279,24 @@ export function Snake({ size, score, setScore, gameOver, setGameOver, onReset }:
   const cellPx = size === 'small' ? 12 : 22
   const gap = size === 'small' ? 2 : 4
 
-  const boardW = cols * cellPx + (cols + 1) * gap
-  const boardH = rows * cellPx + (rows + 1) * gap
+  // Calculate responsive board size for large mode
+  const maxBoardWidth =
+    size === 'large' ? Math.min(window.innerWidth * 0.8, 500) : cellPx * cols + (cols + 1) * gap
+  const maxBoardHeight =
+    size === 'large' ? Math.min(window.innerHeight * 0.65, 700) : cellPx * rows + (rows + 1) * gap
+
+  // Calculate cell size that fits within constraints
+  const actualCellPx =
+    size === 'large'
+      ? Math.min(
+          cellPx,
+          Math.floor((maxBoardWidth - (cols + 1) * gap) / cols),
+          Math.floor((maxBoardHeight - (rows + 1) * gap) / rows)
+        )
+      : cellPx
+
+  const boardW = cols * actualCellPx + (cols + 1) * gap
+  const boardH = rows * actualCellPx + (rows + 1) * gap
 
   const head = snake[0]
 
@@ -370,8 +386,8 @@ export function Snake({ size, score, setScore, gameOver, setGameOver, onReset }:
             position: 'absolute',
             inset: gap,
             display: 'grid',
-            gridTemplateColumns: `repeat(${cols}, ${cellPx}px)`,
-            gridTemplateRows: `repeat(${rows}, ${cellPx}px)`,
+            gridTemplateColumns: `repeat(${cols}, ${actualCellPx}px)`,
+            gridTemplateRows: `repeat(${rows}, ${actualCellPx}px)`,
             gap,
             opacity: 0.9,
           }}
@@ -380,8 +396,8 @@ export function Snake({ size, score, setScore, gameOver, setGameOver, onReset }:
             <div
               key={i}
               style={{
-                width: cellPx,
-                height: cellPx,
+                width: actualCellPx,
+                height: actualCellPx,
                 borderRadius: size === 'small' ? 3 : 6,
                 background: SETTINGS.colors.cell,
               }}
@@ -397,10 +413,10 @@ export function Snake({ size, score, setScore, gameOver, setGameOver, onReset }:
           transition={{ duration: SETTINGS.animationMs / 1000 }}
           style={{
             position: 'absolute',
-            left: gap + food.x * (cellPx + gap),
-            top: gap + food.y * (cellPx + gap),
-            width: cellPx,
-            height: cellPx,
+            left: gap + food.x * (actualCellPx + gap),
+            top: gap + food.y * (actualCellPx + gap),
+            width: actualCellPx,
+            height: actualCellPx,
             borderRadius: size === 'small' ? 3 : 6,
             background: SETTINGS.colors.food,
           }}
@@ -414,8 +430,8 @@ export function Snake({ size, score, setScore, gameOver, setGameOver, onReset }:
               key={`${p.x},${p.y},${idx}`}
               initial={false}
               animate={{
-                x: p.x * (cellPx + gap),
-                y: p.y * (cellPx + gap),
+                x: p.x * (actualCellPx + gap),
+                y: p.y * (actualCellPx + gap),
                 scale: isHead ? 1.02 : 1,
               }}
               transition={{
@@ -426,8 +442,8 @@ export function Snake({ size, score, setScore, gameOver, setGameOver, onReset }:
                 position: 'absolute',
                 left: gap,
                 top: gap,
-                width: cellPx,
-                height: cellPx,
+                width: actualCellPx,
+                height: actualCellPx,
                 borderRadius: size === 'small' ? 3 : 6,
                 background: isHead ? SETTINGS.colors.snakeHead : SETTINGS.colors.snake,
                 boxShadow: isHead ? '0 6px 16px rgba(0,0,0,0.25)' : undefined,
