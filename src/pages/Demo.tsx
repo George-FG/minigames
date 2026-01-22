@@ -5,6 +5,7 @@ import { TwoZeroFourEight, type Grid } from '../demos/TwoZeroFourEight'
 import { SortingVisualizer } from '../demos/sortingVisualiser'
 import { PathfindingVisualizer } from '../demos/pathfindingVisualiser'
 import Sudoku from '../demos/Sudoku'
+import { Snake } from '../demos/Snake'
 
 type Player = 'X' | 'O' | null
 
@@ -41,7 +42,22 @@ export function Demo() {
   const [gameOver2048, setGameOver2048] = useState(false)
   const [hasWon2048, setHasWon2048] = useState(false)
 
-  const handleClose = () => setSelectedDemo(null)
+  // Snake game state
+  const [scoreSnake, setScoreSnake] = useState(0)
+  const [gameOverSnake, setGameOverSnake] = useState(false)
+
+  const handleResetSnake = () => {
+    setScoreSnake(0)
+    setGameOverSnake(false)
+  }
+
+  const handleClose = () => {
+    setSelectedDemo(null)
+    // Reset Snake game when closing
+    if (selectedDemo === 5) {
+      handleResetSnake()
+    }
+  }
 
   useEffect(() => {
     if (selectedDemo === null) return
@@ -216,6 +232,37 @@ export function Demo() {
           >
             <Sudoku size="small" />
           </motion.div>
+          <motion.div
+            key="snake"
+            layoutId="demo-card-5"
+            whileHover={selectedDemo !== 5 ? { scale: 1.05, transition: { duration: 0.2 } } : {}}
+            onClick={() => selectedDemo !== 5 && setSelectedDemo(5)}
+            style={{
+              background: '#454545ff',
+              borderRadius: 12,
+              padding: '1.5rem',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              cursor: selectedDemo !== 5 ? 'pointer' : 'default',
+              minHeight: '240px',
+              aspectRatio: '1 / 1',
+              opacity: selectedDemo === 5 ? 0 : 1,
+              pointerEvents: selectedDemo === 5 ? 'none' : 'auto',
+            }}
+          >
+            <Snake
+              size="small"
+              score={scoreSnake}
+              setScore={setScoreSnake}
+              gameOver={gameOverSnake}
+              setGameOver={setGameOverSnake}
+            />
+          </motion.div>
         </AnimatePresence>
       </div>
 
@@ -320,6 +367,17 @@ export function Demo() {
                 {selectedDemo === 3 && <PathfindingVisualizer />}
 
                 {selectedDemo === 4 && <Sudoku />}
+
+                {selectedDemo === 5 && (
+                  <Snake
+                    size="large"
+                    score={scoreSnake}
+                    setScore={setScoreSnake}
+                    gameOver={gameOverSnake}
+                    setGameOver={setGameOverSnake}
+                    onReset={handleResetSnake}
+                  />
+                )}
               </motion.div>
             </div>
           </motion.div>

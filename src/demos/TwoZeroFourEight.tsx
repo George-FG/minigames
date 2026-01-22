@@ -73,19 +73,19 @@ export function TwoZeroFourEight({
   const idRef = useRef(1)
   const [isAnimating, setIsAnimating] = useState(false)
   const { submitScore } = useUser()
-  const [submitted, setSubmitted] = useState(false)
+  const submittedRef = useRef(false)
 
   useEffect(() => {
-    if (gameOver) {
-      console.log('Game over! Final score:', score)
-      if (submitScore && !submitted) {
-        submitScore('2048', score)
-        setSubmitted(true)
-      }
-    } else {
-      setSubmitted(false)
+    if (!gameOver) {
+      submittedRef.current = false
+      return
     }
-  }, [gameOver, score, submitScore, submitted])
+
+    if (submittedRef.current) return
+
+    submitScore('2048', score)
+    submittedRef.current = true
+  }, [gameOver, submitScore, score])
 
   const getTileColor = (value: number | null): string => {
     if (value === null) return 'rgba(238, 228, 218, 0.35)'

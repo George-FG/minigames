@@ -9,11 +9,16 @@ export function Leaderboard() {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [game, setGame] = useState('2048')
   const { getScores } = useLeaderboard()
   const { authenticateUser } = useUser()
 
-  const game = '2048'
   const limit = 10
+
+  const handleGameChange = (newGame: string) => {
+    setGame(newGame)
+    setPage(1) // Reset to page 1 when game changes
+  }
 
   useEffect(() => {
     let cancelled = false
@@ -62,7 +67,34 @@ export function Leaderboard() {
     <section id="leaderboard" className="section">
       <div className="container">
         <h1 className="section-title">Leaderboard</h1>
-        <h2 className="section-subtitle">Top scores for {game}</h2>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '1rem',
+            marginBottom: '2rem',
+          }}
+        >
+          <h2 className="section-subtitle">Top scores for</h2>
+          <select
+            value={game}
+            onChange={(e) => handleGameChange(e.target.value)}
+            style={{
+              padding: '0.5rem 1rem',
+              fontSize: '1rem',
+              borderRadius: '4px',
+              border: '1px solid #444',
+              background: '#333',
+              color: 'white',
+              cursor: 'pointer',
+            }}
+          >
+            <option value="2048">2048</option>
+            <option value="snake">Snake</option>
+          </select>
+        </div>
 
         {error && (
           <div style={{ color: '#ff6b6b', padding: '1rem', textAlign: 'center' }}>{error}</div>
