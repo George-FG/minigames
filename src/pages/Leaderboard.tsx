@@ -4,7 +4,7 @@ interface ScoreEntry {
   game: string
   username: string
   score: number
-  date: string
+  timestamp: string
 }
 
 export function Leaderboard() {
@@ -39,7 +39,7 @@ export function Leaderboard() {
       console.log('Fetched scores data:', data)
 
       setScores(data.content ?? [])
-      //setHasMore(data.scores.length === limit)
+      //setHasMore(data.number === limit)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')
       console.error('Error fetching scores:', err)
@@ -94,7 +94,7 @@ export function Leaderboard() {
                   ) : (
                     scores.map((entry, index) => (
                       <tr
-                        key={`${entry.username}-${entry.score}-${entry.date}`}
+                        key={`${entry.username}-${entry.score}-${entry.timestamp}`}
                         style={{ borderBottom: '1px solid #444' }}
                       >
                         <td style={{ padding: '1rem' }}>{(page - 1) * limit + index + 1}</td>
@@ -110,7 +110,7 @@ export function Leaderboard() {
                             opacity: 0.7,
                           }}
                         >
-                          {new Date(entry.date).toLocaleDateString()}
+                          {new Date(entry.timestamp).toLocaleDateString()}
                         </td>
                       </tr>
                     ))
