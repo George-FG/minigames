@@ -916,6 +916,7 @@ export function PathfindingVisualizer({ size = 'large' }: PathfindingVisualizerP
   const tapModeRef = useRef<'setStart' | 'setGoal'>('setStart')
   const { submitScore } = useUser()
   const submittedRef = useRef(false)
+  const hasRunRef = useRef(false)
 
   // Use traffic simulation hook
   const trafficVehicles = useTrafficSimulation(trafficMode, trafficDensity, nodes, edges, buildAdj)
@@ -959,12 +960,14 @@ export function PathfindingVisualizer({ size = 'large' }: PathfindingVisualizerP
         { pathNodeIds: [start], pathEdgeIds: [], done: true, message: 'Done' },
       ])
       setStepIndex(0)
+      hasRunRef.current = true
       return
     }
     const built = buildSteps(algo, nodes, edges, start, goal)
     setSteps(built)
     setStepIndex(0)
     setIsRunning(true)
+    hasRunRef.current = true
   }, [algo, edges, isRunning, nodes, start, goal, isMobile])
 
   // Playback loop
@@ -1005,17 +1008,22 @@ export function PathfindingVisualizer({ size = 'large' }: PathfindingVisualizerP
 
   // Submit score when pathfinding reconstruction is finished
   useEffect(() => {
-    if (!current.done || !steps || steps.length === 0) {
+    // Reset submission flag when starting a new run
+    if (!steps || steps.length === 0) {
       submittedRef.current = false
       return
     }
+  }, [steps])
 
+  useEffect(() => {
+    if (!current.done || !steps || steps.length === 0 || !hasRunRef.current) return
     if (submittedRef.current) return
 
     // Submit the number of steps as the score
     submitScore('pathfinding', steps.length)
     submittedRef.current = true
-  }, [current.done, steps, submitScore])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current.done, steps])
 
   const visitedSet = useMemo(() => new Set(current.visited ?? []), [current.visited])
   const frontierSet = useMemo(() => new Set(current.frontier ?? []), [current.frontier])

@@ -244,6 +244,7 @@ export function SortingVisualizer({ size = 'large' }: SortingVisualizerProps) {
   const timerRef = useRef<number | null>(null)
   const { submitScore } = useUser()
   const submittedRef = useRef(false)
+  const hasRunRef = useRef(false)
 
   const currentStep = useMemo<Step>(() => {
     if (!steps || steps.length === 0) return { values }
@@ -254,10 +255,15 @@ export function SortingVisualizer({ size = 'large' }: SortingVisualizerProps) {
 
   // Submit score when sorting is finished
   useEffect(() => {
+    // Reset submission flag when starting a new run
     if (!steps || steps.length === 0 || isSorting) {
       submittedRef.current = false
       return
     }
+  }, [steps, isSorting])
+
+  useEffect(() => {
+    if (!steps || steps.length === 0 || isSorting || !hasRunRef.current) return
 
     // Check if we've reached the end (sorting is complete)
     if (stepIndex >= steps.length - 1) {
@@ -267,7 +273,8 @@ export function SortingVisualizer({ size = 'large' }: SortingVisualizerProps) {
       submitScore('sorting', steps.length)
       submittedRef.current = true
     }
-  }, [steps, stepIndex, isSorting, submitScore])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [steps, stepIndex, isSorting])
 
   const stop = useCallback(() => {
     setIsSorting(false)
@@ -317,6 +324,7 @@ export function SortingVisualizer({ size = 'large' }: SortingVisualizerProps) {
     setSteps(built)
     setStepIndex(0)
     setIsSorting(true)
+    hasRunRef.current = true
   }, [algo, isSorting, values, steps, stepIndex])
 
   useEffect(() => {
