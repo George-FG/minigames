@@ -32,7 +32,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const submitScore = async (game: string, score: number) => {
-    _setShouldRefresh(!shouldRefresh)
     let res = await fetch(`https://api.george.richmond.gg/api/submit-score`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -52,6 +51,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
 
     console.log('Score submission response:', res)
+    _setShouldRefresh(!shouldRefresh)
   }
 
   const setShouldRefresh = (value: boolean) => {
