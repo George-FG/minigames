@@ -9,13 +9,15 @@ interface UserContextType {
   authenticateUser: () => void
   logOut: () => void
   submitScore: (game: string, score: number) => void
+  shouldRefresh: boolean
+  setShouldRefresh: (value: boolean) => void
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
-
+  const [shouldRefresh, _setShouldRefresh] = useState(false)
   const authenticateUser = async () => {
     const userData = await authenticate()
     setUser(userData)
@@ -30,6 +32,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const submitScore = async (game: string, score: number) => {
+    _setShouldRefresh(!shouldRefresh)
     let res = await fetch(`https://api.george.richmond.gg/api/submit-score`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -51,8 +54,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     console.log('Score submission response:', res)
   }
 
+  const setShouldRefresh = (value: boolean) => {
+    _setShouldRefresh(value)
+  }
+
   return (
-    <UserContext.Provider value={{ user, authenticateUser, logOut, submitScore }}>
+    <UserContext.Provider
+      value={{ user, authenticateUser, logOut, submitScore, shouldRefresh, setShouldRefresh }}
+    >
       {children}
     </UserContext.Provider>
   )

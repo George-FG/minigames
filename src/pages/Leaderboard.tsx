@@ -11,7 +11,7 @@ export function Leaderboard() {
   const [error, setError] = useState<string | null>(null)
   const [game, setGame] = useState('2048')
   const { getScores } = useLeaderboard()
-  const { authenticateUser } = useUser()
+  const { authenticateUser, shouldRefresh } = useUser()
 
   const limit = 10
 
@@ -49,7 +49,7 @@ export function Leaderboard() {
     return () => {
       cancelled = true
     }
-  }, [game, page, limit, getScores, authenticateUser])
+  }, [game, page, limit, getScores, authenticateUser, shouldRefresh])
 
   const handleNextPage = () => {
     if (hasMore && !loading) {
